@@ -1,0 +1,124 @@
+DROP DATABASE IF EXISTS delta_LMS;
+
+CREATE DATABASE IF NOT EXISTS delta_LMS;
+
+USE delta_LMS;
+
+CREATE TABLE IF NOT EXISTS users
+(
+	user_id int(5) NOT NULL,
+	first_name varchar(50) DEFAULT NULL,
+	last_name varchar(50) DEFAULT NULL,
+	username varchar(20) DEFAULT NULL,
+	password_hash varchar(20) DEFAULT NULL,
+	role varchar(20) DEFAULT NULL,
+	PRIMARY KEY (user_id)
+);
+
+CREATE TABLE IF NOT EXISTS members
+(
+	member_id int(5) NOT NULL,
+	first_name varchar(50) DEFAULT NULL,
+	last_name varchar(50) DEFAULT NULL,
+	email varchar(100) DEFAULT NULL,
+	phone varchar(20) DEFAULT NULL,
+	PRIMARY KEY (member_id)
+);
+
+CREATE TABLE IF NOT EXISTS books
+(
+	book_id int(20) NOT NULL,
+	ISBN varchar(50) DEFAULT NULL,
+	title varchar(200) DEFAULT NULL,
+	author varchar(200) DEFAULT NULL,
+	genre varchar(50) DEFAULT NULL,
+	call_number varchar(30) DEFAULT NULL,
+	PRIMARY KEY (book_id)	
+);
+
+CREATE TABLE IF NOT EXISTS BookCopies
+(
+	copy_id int(20) NOT NULL,
+	book_id int(20) NOT NULL,
+	call_number varchar(30) DEFAULT NULL,
+	status boolean DEFAULT NULL,
+	PRIMARY KEY (copy_id),
+	FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS transactions
+(
+	transaction_id int(10) NOT NULL,
+	user_id int(5) DEFAULT NULL,
+	member_id int(5) DEFAULT NULL,
+	copy_id int(20) DEFAULT NULL,
+	checkout_date date DEFAULT NULL,
+	due_date date DEFAULT NULL,
+	return_date date DEFAULT NULL,
+	late_fee int(5) DEFAULT NULL,
+	PRIMARY KEY (transaction_id),
+	FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+	FOREIGN KEY (member_id) REFERENCES members(member_id) ON DELETE CASCADE,
+	FOREIGN KEY (copy_id) REFERENCES BookCopies(copy_id) ON DELETE CASCADE	
+);
+
+CREATE TABLE IF NOT EXISTS holds
+(
+	hold_id int(10) NOT NULL,
+	member_id int(5) DEFAULT NULL,
+	book_id int(20) DEFAULT NULL,
+	hold_date date DEFAULT NULL,
+	status boolean DEFAULT NULL,
+	PRIMARY KEY (hold_id),
+	FOREIGN KEY (member_id) REFERENCES members(member_id) ON DELETE CASCADE,
+	FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE	
+);
+
+
+INSERT INTO users
+(
+	user_id,
+	first_name,
+	last_name,
+	username,
+	password_hash,
+	role
+)
+VALUES
+	(11111, 'poison', 'ivy', 'greengoddess', '11111', 'Librarian'),
+	(22222, 'bruce', 'wayne', 'darkknight', '22222', 'Circulation'),
+	(33333, 'april', 'oneal', 'tmnt', '33333', 'Circulation');
+
+
+INSERT INTO members
+(
+	member_id,
+	first_name,
+	last_name,
+	email,
+	phone
+)
+VALUES
+	(77123,'Michelle','Wallace','mw123@fake.com','5555557123'),
+	(77124,'Mitchell','Wilcox','mw124@fake.com','5555557124'),
+	(77125,'Margaret','Washington','wm124@fake.com','5555557125'),
+	(77126,'Mildred','Westminster','wm126@fake.com','5555557126'),
+	(77127,'Michael','Williams','wm127@fake.com','5555557127');
+
+INSERT INTO books
+(
+	book_id,
+	ISBN,
+	title,
+	author,
+	genre,
+	call_number
+)
+VALUES
+-- used claude.ai to generate sample book data
+	(10000000,'9780060935467','To Kill a Mockingbird','Harper Lee','Fiction','813.54 LEE'),
+	(10000001,'9780451524935','1984','George Orwell','Dystopian','823.912 ORW'),
+	(10000002,'9780743273565','The Great Gatsby','F. Scott  Fitzgerald','Fiction','813.52 FIT'),
+	(10000003,'9780141439518','Pride and Prejudice','Jane Austen','Romance', '823.7 AUS'),
+	(10000004,'9780547928227','The Hobbit','J.R.R. Tolkien','Fantasy','823.912 TOL'),
+	(10000005,'9780062316097','Sapiens: A Brief History of Humankind','Yuval Noah Harari','History','909 HAR');
