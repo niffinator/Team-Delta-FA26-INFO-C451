@@ -27,7 +27,7 @@ Test 4
 
 4.) Create the local environment file:
 
-    copy .env.example .env
+    A copy of the '.env.example' .env file is provided in our repository
 
 5.) Generate the Laravel application key
 
@@ -35,11 +35,15 @@ Test 4
 
 6.) Configure the MySQL connection in '.env'
 
+    may need to create your own password, etc.
+
 7.) Build and seed the demonstration database:
 
     run the command:
         
         php artisan migrate:fresh --seeder=DemoSeeder
+
+    the above command provides the database with sample records used for this demo
 
 8.) Start Laravel for demonstration page
 
@@ -52,6 +56,8 @@ Test 4
 9.) Open the application in a browser:
 
     http://127.0.0.1:8000
+
+    go to the 'Check out' page and run the demonstration provided below
 
 
 ## UC-4 Checkout Demonstration 
