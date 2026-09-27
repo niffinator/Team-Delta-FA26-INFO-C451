@@ -17,7 +17,7 @@
     <h3>Library Operations</h3>
 
     <p>
-        We currently support access to our book collection, allow new members, have checkout functions, and you may view our library reports.
+        We currently support barebones implementation of our webpage views(with much of the content being placeholders) and a checkout feature on the checkout page.
     </p>
 
 @endsection

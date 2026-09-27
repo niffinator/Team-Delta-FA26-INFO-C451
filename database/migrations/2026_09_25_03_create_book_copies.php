@@ -12,12 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('book_copies', function (Blueprint $table) {
-            $table->id('copy_id');
+
+            $table->bigIncrements('copy_id');
+            
             $table->unsignedBigInteger('book_id');
-            $table->foreign('book_id')->references('book_id')->on('books'); 
-            $table->char('call_number');
-            $table->char('status');
-            $table->timestamps();
+            $table->foreign('book_id')
+                ->references('book_id')
+                ->on('books'); 
+
+            $table->string('call_number');
+
+            $table->enum('status', [
+                'available',
+                'checked out'
+            ])->default('available');
         });
     }
 

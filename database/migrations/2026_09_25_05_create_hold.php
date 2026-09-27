@@ -11,15 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hold', function (Blueprint $table) {
+        Schema::create('holds', function (Blueprint $table) {
+
             $table->bigIncrements('hold_id');
+
             $table->unsignedBigInteger('member_id');
-            $table->foreign('member_id')->references('member_id')->on('members');
+            $table->foreign('member_id')
+                ->references('member_id')
+                ->on('members');
+                
             $table->unsignedBigInteger('book_id');
-            $table->foreign('book_id')->references('book_id')->on('books');
-            $table->dateTime('hold_date');
-            $table->char('status');
-            $table->timestamps();
+            $table->foreign('book_id')
+                ->references('book_id')
+                ->on('books');
+
+            $table->date('hold_date');
+
+            $table->enum('status', [
+                'active',
+                'fulfilled',
+                'cancelled'
+            ])->defualt('active');
         });
     }
 

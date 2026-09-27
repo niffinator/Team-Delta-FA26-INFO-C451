@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->bigIncrements('book_id');
-            $table->char('ISBN');
-            $table->char('title');
-            $table->char('author');
-            $table->char('genre');
-            $table->timestamps();
+            $table->string('ISBN', length: 13);
+            $table->string('title');
+            $table->string('author');
+            $table->string('genre');
         });
     }
 

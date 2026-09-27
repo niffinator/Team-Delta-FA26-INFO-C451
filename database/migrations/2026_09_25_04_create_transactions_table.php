@@ -13,16 +13,26 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->bigIncrements('transaction_id');
+
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('user_id')
+                ->references('user_id')
+                ->on('users');
+
             $table->unsignedBigInteger('member_id');
-            $table->foreign('member_id')->references('member_id')->on('members');
+            $table->foreign('member_id')
+                ->references('member_id')
+                ->on('members');
+
             $table->unsignedBigInteger('copy_id');
-            $table->foreign('copy_id')->references('copy_id')->on('book_copies');
+            $table->foreign('copy_id')
+                ->references('copy_id')
+                ->on('book_copies');
+
             $table->timestamp('checkout_date');
             $table->timestamp('due_date');
-            $table->timestamp('return_date');
-            $table->decimal('late_fee');
+            $table->timestamp('return_date')->nullable();
+            $table->decimal('late_fee', 8, 2)->default(0);
         });
     }
 

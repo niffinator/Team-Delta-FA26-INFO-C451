@@ -8,13 +8,32 @@
 
     <p>Enter the member and the copy of the book being checked out below.</p>
 
-    <form>
+    <form method="POST" action="{{ route('checkout.store') }}">
+        @csrf
+
+        @if (session('success'))
+            <p>
+                <strong>{{ session('success') }}</strong>
+            </p>
+        @endif
+
+        @if ($errors->any())
+            <div>
+                <strong>We could not complete your checkout:</strong>
+                
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>                        
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <h3>Member Information</h3>
 
         <div>
             <label for="member_id">Member ID:</label>
-            <input type="number" id="member_id" name="member_id" required>
+            <input type="number" id="member_id" name="member_id" value="{{ old('member_id') }}" required>
         </div>
 
         <br>
@@ -23,7 +42,7 @@
         
             <div>
                 <label for="copy_id">Book Copy: ID</label>
-                <input type="number" id="copy_id" name="copy_id" required>
+                <input type="number" id="copy_id" name="copy_id" value="{{ old('copy_id') }}" required>
             </div> 
 
 
@@ -33,7 +52,13 @@
 
         <div>
             <label for="checkout_date">Checkout Date:</label>
-            <input type="date" id="checkout_date" name="checkout_date" value="{{ date('Y-m-d') }} readonly">
+            <input 
+                type="date" 
+                id="checkout_date" 
+                name="checkout_date" 
+                value="{{ date('Y-m-d') }}" 
+                readonly
+            >
         </div>
 
         <br>
@@ -45,7 +70,7 @@
 
         <br>
 
-        <button type="button">
+        <button type="submit">
             Checkout Book
         </button>
 
