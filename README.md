@@ -4,10 +4,10 @@ Team-Delta-FA26-INFO-C451
 A web-based records management system designed for library employees' internal use to manage book inventory and member borrowing statuses.
 
 ### Requirements for Installation and Operation
--PHP
--Composer
--Node.js/ npm
--MySQL
+- PHP
+- Composer
+- Node.js/ npm
+- MySQL
 
 ### Setup
 
