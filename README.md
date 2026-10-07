@@ -1,7 +1,7 @@
 Team-Delta-FA26-INFO-C451
 -- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity Young
 # Book_WRMS
-A web-based records management system designed for library employees' internal use to manage book inventory and member borrowing statuses.
+A web-based records management system designed for internal use by library employees to manage book inventory and borrowing member accounts.
 
 ### Requirements for Installation and Operation
 - PHP
