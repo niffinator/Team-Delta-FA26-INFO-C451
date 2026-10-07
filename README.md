@@ -1,13 +1,9 @@
-TEST
-Test 2
-Test 3
-Test 4
-# Team-Delta-FA26-INFO-C451
--- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity 
+Team-Delta-FA26-INFO-C451
+-- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity Young
+# Book_WRMS
+A web-based records management system designed for library employees' internal use to manage book inventory and member borrowing statuses.
 
-## A.4 Working System Skeleton Demo
-
-### Requirements
+### Requirements for Installation and Operation
 -PHP
 -Composer
 -Node.js/ npm
@@ -15,7 +11,8 @@ Test 4
 
 ### Setup
 
-1.) Clone our repository
+1.) Clone the Team-Delta-FA26-INFO-C451 public repository from GitHub:
+    https://github.com/niffinator/Team-Delta-FA26-INFO-C451
 
 2.) Install PHP dependency:
     
