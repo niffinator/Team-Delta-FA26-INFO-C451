@@ -55,16 +55,17 @@ class CheckoutController extends Controller
         }
 
         $activeHold = Hold::where('book_id', $bookCopy->book_id)
-            ->where('status', 'active')
-            ->exists();
+    ->where('status', 'active')
+    ->orderBy('hold_date')
+    ->first();
 
-        if ($activeHold) {
-            return back()
-                ->withErrors([
-                    'copy_id' => 'This book has an active hold and we cannot lend it out right now.'
-                ])
-                ->withInput();
-        }
+if ($activeHold && (int) $activeHold->member_id !== (int) $member->member_id) {
+    return back()
+        ->withErrors([
+            'copy_id' => 'This book is reserved for another member.'
+        ])
+        ->withInput();
+}
 
         $transaction = new Transaction;
 
