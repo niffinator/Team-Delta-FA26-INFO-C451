@@ -31,7 +31,7 @@ return new class extends Migration
                 'active',
                 'fulfilled',
                 'cancelled'
-            ])->defualt('active');
+            ])->default('active');
         });
     }
 
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hold');
+        Schema::dropIfExists('holds');
     }
 };

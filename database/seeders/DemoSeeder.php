@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Hash;
 
 class DemoSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $clerkId = DB::table('users')->insertGetId([
