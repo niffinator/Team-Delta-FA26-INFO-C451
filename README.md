@@ -1,7 +1,3 @@
-TEST
-Test 2
-Test 3
-Test 4
 # Team-Delta-FA26-INFO-C451
 -- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity 
 
@@ -15,29 +11,33 @@ Test 4
 
 ### Setup
 
-1.) Clone our repository
+1.) Clone repository from GitHub
 
-2.) Install PHP dependency:
+2.) Launch Teminal or Powershell
+
+3.) Run command: git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
+
+4.) Install PHP dependency:
     
     composer install
 
-3.) Install frontend dependency:
+5.) Install frontend dependency:
 
     npm install
 
-4.) Create the local environment file:
+6.) Create the local environment file:
 
     A copy of the '.env.example' .env file is provided in our repository
 
-5.) Generate the Laravel application key
+7.) Generate the Laravel application key
 
     php artisan key:generate
 
-6.) Configure the MySQL connection in '.env'
+8.) Configure the MySQL connection in '.env'
 
     may need to create your own password, etc.
 
-7.) Build and seed the demonstration database:
+9.) Build and seed the demonstration database:
 
     run the command:
         
@@ -45,15 +45,15 @@ Test 4
 
     the above command provides the database with sample records used for this demo
 
-8.) Start Laravel for demonstration page
+10.) Start Laravel for demonstration page
 
     php artisan serve
 
-8.5) Probably need to start Vite in another terminal
+10.5) Probably need to start Vite in another terminal
 
     npm run dev
 
-9.) Open the application in a browser:
+11.) Open the application in a browser:
 
     http://127.0.0.1:8000
 
