@@ -184,6 +184,18 @@ class CheckoutController extends Controller
                 )
                 ->appends($searchState);
         }
+        $activeHold = Hold::where('book_id', $bookCopy->book_id)
+    ->where('status', 'active')
+    ->orderBy('hold_date')
+    ->first();
+
+if ($activeHold && (int) $activeHold->member_id !== (int) $member->member_id) {
+    return back()
+        ->withErrors([
+            'copy_id' => 'This book is reserved for another member.'
+        ])
+        ->withInput();
+}
 
         return view('checkout.index', [
             'checkoutTransaction' => $checkoutTransaction,
