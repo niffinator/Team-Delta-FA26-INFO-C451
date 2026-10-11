@@ -41,7 +41,7 @@ git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
         
         php artisan migrate:fresh --seeder=DemoSeeder
 
-8.) Start Laravel for demonstration page
+8.) Start Laravel for demonstration page --this may not be necessary as it is part of the seeder command
 
     php artisan serve
 
@@ -49,7 +49,10 @@ git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
 
     npm run dev
 
-9.) Open the application in a browser:
+9.) Change git branch to:
+- origin/features/revisions-10-08-26
+
+10.) Open the application in a browser:
 
     http://127.0.0.1:8000
 
