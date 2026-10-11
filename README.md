@@ -1,17 +1,18 @@
-# Team-Delta-FA26-INFO-C451
+# Book WRMS A Web-based Records Management System for Libraries
+Team-Delta-FA26-INFO-C451
 -- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity 
 
-## A.4 Working System Skeleton Demo
+## System Setup
 
 ### Requirements
--PHP
--Composer
--Node.js/ npm
--MySQL
+- PHP
+- Composer
+- Node.js/ npm
+- MySQL
 
 ### Setup
 
-1.) Clone our repository
+1.) Clone the Team-Delta-FA26-INFO-C451 repository
 
 2.) Install PHP dependency:
     
