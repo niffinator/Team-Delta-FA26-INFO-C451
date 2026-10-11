@@ -10,14 +10,6 @@ class Hold extends Model
 
     public $timestamps = false;
 
-    // Use date and time for hold_date for hold-queuing purpose and eventual resolution
-    protected function casts(): array
-    {
-        return [
-            'hold_date' => 'datetime',
-        ];
-    }
-
     public function member()
     {
         return $this->belongsTo(Member::class, 'member_id');
