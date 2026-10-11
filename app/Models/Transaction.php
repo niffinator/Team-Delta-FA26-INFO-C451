@@ -20,16 +20,6 @@ class Transaction extends Model
         'late_fee',
     ];
 
-    protected function casts(): array
-    {
-        return [
-            'checkout_date' => 'datetime',
-            'due_date' => 'datetime',
-            'return_date' => 'datetime',
-            'late_fee' => 'decimal:2',
-        ];
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

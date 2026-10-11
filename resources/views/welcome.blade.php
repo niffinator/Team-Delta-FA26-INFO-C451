@@ -17,7 +17,7 @@
     <h3>Library Operations</h3>
 
     <p>
-        We currently support barebones implementation of our webpage views (with much of the content being placeholders) and a checkout feature on the checkout page.
+        We currently support barebones implementation of our webpage views(with much of the content being placeholders) and a checkout feature on the checkout page.
     </p>
 
 @endsection

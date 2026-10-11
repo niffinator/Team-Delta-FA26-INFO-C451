@@ -12,8 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->engine('InnoDB');
-
             $table->bigIncrements('member_id');
             $table->string('first_name');
             $table->string('last_name');
