@@ -24,6 +24,7 @@ class CheckoutService
             return DB::transaction(function () use ($user, $memberId, $copyId) {
                 $member = Member::find($memberId);
 
+                // Check if the member exists
                 if (!$member) {
                     throw ValidationException::withMessages([
                         'member_id' => 'That member does not exist.'
@@ -32,6 +33,7 @@ class CheckoutService
 
                 $requestedCopy = BookCopy::find($copyId);
 
+                // Check if the book copy exists
                 if (!$requestedCopy) {
                     throw ValidationException::withMessages([
                         'copy_id' => 'We do not have a copy of that book in our library.'
@@ -42,6 +44,7 @@ class CheckoutService
                     ->lockForUpdate()
                     ->firstOrFail();
 
+                // Check if the book copy is available
                 $bookCopy = BookCopy::where('copy_id', $copyId)
                     ->where('book_id', $requestedCopy->book_id)
                     ->lockForUpdate()
@@ -59,23 +62,48 @@ class CheckoutService
                     ]);
                 }
 
-                $firstHold = Hold::where('book_id', $bookCopy->book_id)
+                // Count and lock the available physical book copies for this book
+                $availableCopies = BookCopy::where('book_id', $bookCopy->book_id)
+                ->where('status', 'available')
+                ->orderBy('copy_id')
+                ->lockForUpdate()
+                ->pluck('copy_id')
+                ->count();
+
+                // Get the active holds in queue order
+                $activeHolds = Hold::where('book_id', $bookCopy->book_id)
                     ->where('status', 'active')
                     ->orderBy('hold_date')
                     ->orderBy('hold_id')
                     ->lockForUpdate()
-                    ->first();
+                    ->get();
 
-                if (
-                    $firstHold &&
-                    (int) $firstHold->member_id !== (int) $member->member_id
-                ) {
+                $holdCount = $activeHolds->count();
+                $memberPosition = 0;
+                $memberHold = null;
+
+                foreach ($activeHolds as $index => $hold) {
+                    if ((int) $hold->member_id === (int) $member->member_id) {
+                        $memberPosition = $index + 1;
+                        $memberHold = $hold;
+                        break;
+                    }
+                }
+
+                // A member with a hold needs enough copies to cover their position in the queue
+                // Someone without a hold needs there to be enough copies available beyond the number of active holds
+                $blockedByHolds = $memberHold
+                    ? $availableCopies < $memberPosition
+                    : $availableCopies <= $holdCount;
+
+                if($blockedByHolds) {
                     throw ValidationException::withMessages([
-                        'copy_id' => 'Another member has reserved this book and is ahead in the queue.'
+                        'copy_id' => 'There are not enough available copies to check this book out.' +
+                        'We must honor our active holds.'
                     ]);
                 }
 
-
+                // Create a new transaction for the checkout
                 $checkoutDate = now();
 
                 $transaction = new Transaction;
@@ -89,17 +117,19 @@ class CheckoutService
                 $transaction->late_fee = 0;
                 $transaction->save();
 
+                // Update the book copy status (physical book)
                 $bookCopy->status = 'checked out';
                 $bookCopy->save();
 
-                if ($firstHold) {
-                    $firstHold->status = 'fulfilled';
-                    $firstHold->save();
+                if ($memberHold) {
+                    $memberHold->status = 'fulfilled';
+                    $memberHold->save();        
                 }
 
                 return $transaction;
             }, 3);
             
+        // Handle unique constraint violation for open transactions
         } catch (UniqueConstraintViolationException $exception) {
             if (!str_contains(
                 $exception->getMessage(),
@@ -109,7 +139,7 @@ class CheckoutService
             }
 
             throw ValidationException::withMessages([
-                'copy_id' => 'That book is already checked out and cannot be checked out again at this time.'
+                'copy_id' => 'That book is already checked out and cannot be checked out again right now.'
             ]);
         }   
     }

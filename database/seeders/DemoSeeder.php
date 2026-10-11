@@ -151,7 +151,7 @@ class DemoSeeder extends Seeder
             DB::table('holds')->insert([
                 [
                     'member_id' => $pinkId,
-                    'book_id' => $hobbitId,
+                    'book_id' => $neuromancerId,
                     'hold_date' => $seedTime->copy()->subDay(),
                     'status' => 'active',
                 ],
