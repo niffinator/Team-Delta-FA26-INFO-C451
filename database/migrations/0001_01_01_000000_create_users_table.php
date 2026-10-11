@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -12,6 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
+            $table->engine('InnoDB');
+
             $table->bigIncrements('user_id');
             $table->string('first_name');
             $table->string('last_name');
@@ -20,6 +23,15 @@ return new class extends Migration
             $table->string('role');
             $table->timestamps();
         });
+
+        // Database constraint to conform to business rules - exact comparision for role values
+        DB::statement("
+            ALTER TABLE users
+            ADD CONSTRAINT users_role_valid
+                CHECK (
+                    CAST(role as BINARY) IN ('Clerk', 'Librarian')
+                )
+        ");
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

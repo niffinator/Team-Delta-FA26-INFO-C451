@@ -12,6 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('holds', function (Blueprint $table) {
+            // Use InnoDB engine for foreign key support
+            $table->engine('InnoDB');
 
             $table->bigIncrements('hold_id');
 
@@ -25,21 +27,36 @@ return new class extends Migration
                 ->references('book_id')
                 ->on('books');
 
-            $table->date('hold_date');
+            $table->dateTime('hold_date');
 
             $table->enum('status', [
                 'active',
                 'fulfilled',
                 'cancelled'
-            ])->defualt('active');
+            ])->default('active');
+
+            // Enforce one active book per member/book
+            $table->unsignedBigInteger('active_member_id')
+                ->nullable()
+                ->virtualAs(
+                    "CASE WHEN status = 'active' THEN member_id ELSE NULL END"
+                );
+
+            // Enforcement 
+            $table->unique(
+                ['book_id', 'active_member_id'],
+                'holds_one_active_book_per_member_book'
+            );
+
+            // Queue index for efficient hold retrieval
+            $table->index(
+                ['book_id', 'status', 'hold_date', 'hold_id'],
+                'holds_queue_index'
+            );
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('hold');
+        Schema::dropIfExists('holds');
     }
 };
