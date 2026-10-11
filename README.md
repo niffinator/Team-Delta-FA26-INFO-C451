@@ -13,6 +13,9 @@ Team-Delta-FA26-INFO-C451
 ### Setup
 
 1.) Clone the Team-Delta-FA26-INFO-C451 repository
+```bash
+git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
+```
 
 2.) Install PHP dependency:
     
