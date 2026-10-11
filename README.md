@@ -27,7 +27,7 @@ Test 4
 
 4.) Create the local environment file:
 
-    copy .env.example .env
+    We have provided a copy of the example.env, you will need to setup your own with your own password
 
 5.) Generate the Laravel application key
 
