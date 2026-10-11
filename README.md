@@ -25,9 +25,9 @@ git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
 
     npm install
 
-4.) Create the local environment file:
-
-    copy .env.example .env
+4.) Create the local environment file
+- We have provided a copy of the example.env
+- You will need to setup your own with your own password
 
 5.) Generate the Laravel application key
 
