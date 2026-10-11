@@ -19,9 +19,4 @@ class BookCopy extends Model
     {
         return $this->hasMany(Transaction::class, "copy_id");
     }
-
-    public function status()
-    {
-        return $this->status;
-    }
 }

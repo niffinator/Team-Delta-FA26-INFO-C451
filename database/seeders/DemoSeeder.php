@@ -15,6 +15,9 @@ class DemoSeeder extends Seeder
             // Set the seed time for use later on
             $seedTime = now()->startOfSecond();
 
+            // =============
+            // Users
+            // -------------
             $clerkId = DB::table('users')->insertGetId([
                 'first_name' => 'Big',
                 'last_name' => 'Bertha',
@@ -41,6 +44,9 @@ class DemoSeeder extends Seeder
                 'role' => 'Librarian',
             ]);
             
+            // =============
+            // Members
+            // -------------
             $johnId = DB::table('members')->insertGetId([
                 'first_name' => 'John',
                 'last_name' => 'Books',
@@ -62,6 +68,9 @@ class DemoSeeder extends Seeder
                 'phone' => '54-3223-455',
             ]);
 
+            // =============
+            // Books    
+            // -------------
             $hobbitId = DB::table('books')->insertGetId([
                 'ISBN' => '9780547928227',
                 'title' => 'The Hobbit',
@@ -83,18 +92,38 @@ class DemoSeeder extends Seeder
                 'genre' => 'science-fiction',
             ]);        
 
+            // =============
+            // Book Copies
+            // -------------
+
+            // Available copies of The Hobbit
             DB::table('book_copies')->insert([
                 'book_id' => $hobbitId,
                 'call_number' => 'F TOLKIEN',
                 'status' => 'available',
             ]);
 
+            DB::table('book_copies')->insert([
+                'book_id' => $hobbitId,
+                'call_number' => 'F TOLKIEN',
+                'status' => 'available',
+            ]);
+            
+            // Checked out copy of The Hobbit
+            DB::table('book_copies')->insert([
+                'book_id' => $hobbitId,
+                'call_number' => 'F TOLKIEN',
+                'status' => 'checked out',
+            ]);            
+
+            // Checked out copy of Wheel of Time
             $wheelOfTimeCopyId = DB::table('book_copies')->insertGetId([
                 'book_id' => $wheelOfTimeId,
                 'call_number' => 'F JORDAN',
                 'status' => 'checked out',
             ]);
 
+            // Available copy of Neuromancer
             DB::table('book_copies')->insert([
                 'book_id' => $neuromancerId,
                 'call_number' => 'SF GIBSON',
@@ -103,6 +132,9 @@ class DemoSeeder extends Seeder
             
             $existingCheckoutDate = $seedTime->copy()->subDays(7);
 
+            // =============
+            // Transactions
+            // -------------
             DB::table('transactions')->insert([
                 'user_id' => $clerkId,
                 'member_id' => $melId,
@@ -113,6 +145,9 @@ class DemoSeeder extends Seeder
                 'late_fee' => 0,
             ]);
 
+            // =============
+            // Holds
+            // -------------
             DB::table('holds')->insert([
                 [
                     'member_id' => $pinkId,

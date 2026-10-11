@@ -8,17 +8,17 @@
 
     <p>Sign in with your library staff account.</p>
 
-    {{-- Display confirmation after the user logs out. --}}
+    
     @if (session('success'))
         <div role="status">
             <p>{{ session('success') }}</p>
         </div>
     @endif
 
-    {{-- Display validation, credential, or login-limit errors. --}}
+    
     @if ($errors->any())
         <div role="alert">
-            <strong>We could not sign you in:</strong>
+            <strong>We could not sign you in because:</strong>
 
             <ul>
                 @foreach ($errors->all() as $error)
@@ -28,8 +28,9 @@
         </div>
     @endif
 
+    {{-- the new Login Form --}}
     <form method="POST" action="{{ route('login.store') }}">
-        {{-- Protect the form submission against CSRF requests. --}}
+        
         @csrf
 
         <div>
@@ -52,7 +53,6 @@
         <div>
             <label for="password">Password:</label>
 
-            {{-- Never repopulate the password after a failed attempt. --}}
             <input
                 type="password"
                 id="password"

@@ -52,6 +52,7 @@ class AuthController extends Controller
         return redirect()->intended('/');
     }
 
+    # Log the user out of the application.
     public function logout(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
@@ -65,6 +66,7 @@ class AuthController extends Controller
             ->with('success', 'You have been logged out.');
     }
 
+    # Generate a unique key for rate limiting based on the user's IP address and username.
     private function throttleKey(Request $request): string
     {
         $identity = Str::lower($request->input('username'))

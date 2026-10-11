@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
 // Incredibly limited functionality for anyone not logged in - can only see login page
@@ -24,7 +25,7 @@ Route::middleware('auth:web')->group(function() {
         Route::view('/', 'welcome')
             ->name('home');
 
-        Route::view('/books', 'books.index')
+        Route::get('/books', [BookController::class, 'index'])
             ->name('books.index');
 
         Route::view('/members', 'members.index')

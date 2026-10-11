@@ -12,6 +12,7 @@
     <header>
         <h1>Book WRMS</h1>
 
+        {{--Display authentication status and navigation links --}}
         @auth('web')
             <p>
                 Signed in as
@@ -19,6 +20,7 @@
                 ({{{ auth('web')->user()->role }}})
             </p>
             
+            // Display navigation links based on user permissions.
             @can('access-library')
                 <nav>
                     <a href="{{ url('/') }}">Home</a> |
@@ -41,6 +43,7 @@
                 <button type="submit">Sign Out</button>
             </form>
         @endauth
+        
         
         @guest('web')
             <nav aria-label="Main Navigation">

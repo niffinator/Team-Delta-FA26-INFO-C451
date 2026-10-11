@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Checkout Book')
@@ -6,12 +7,14 @@
 
     <h2>Check Out a Book</h2>
 
+    {{-- Display success message after a successful checkout --}}
     @if (session('success'))
         <div role="status">
             <p>
                 <strong>{{ session('success') }}</strong>
             </p>
 
+            {{-- Display the completed checkout information --}}
             @if ($checkoutTransaction)
                 <h3>Completed Checkout</h3>
 
@@ -51,6 +54,7 @@
         </div>
     @endif
 
+    {{-- Display validation or checkout errors --}}
     @if ($errors->any())
         <div role="alert">
             <strong>We could not complete your checkout:</strong>
@@ -63,9 +67,12 @@
         </div>
     @endif
 
+    {{-- Display search errors --}}
+    {{-- Search errors are supplied by CheckoutController's index method --}}
     @if ($searchErrors->any())
         <div role="alert">
             <strong>Please correct the following errors:</strong>
+
             <ul>
                 @foreach ($searchErrors->all() as $error)
                     <li>{{ $error }}</li>
@@ -80,32 +87,38 @@
     </p>
 
     <p>
-        <a href="{{route('checkout.index')}}">New Checkout Transaction</a>
+        <a href="{{ route('checkout.index') }}">New Checkout Transaction</a>
     </p>
 
+    {{-- MEMBER SEARCH --}}
     <h3>Member Search</h3>
+
     <form method="GET" action="{{ route('checkout.index') }}">
         <div>
             <label for="member_search">Member Name or ID:</label>
+
             <input
                 type="search"
                 id="member_search"
                 name="member_search"
                 value="{{ $memberSearch }}"
-                maxlength = "150"
-                placeholder="Enter member info..."
+                maxlength="150"
+                placeholder="Member info"
+                required
             >
         </div>
 
+        {{-- Preserve existing book searches and selected records --}}
         <input type="hidden" name="book_search" value="{{ $bookSearch }}">
         <input type="hidden" name="book_field" value="{{ $bookField }}">
         <input type="hidden" name="copy_status" value="{{ $copyStatus }}">
         <input type="hidden" name="selected_member_id" value="{{ $selectedMember?->member_id }}">
         <input type="hidden" name="selected_copy_id" value="{{ $selectedCopy?->copy_id }}">
-        
+
         <button type="submit">Search Members</button>
     </form>
 
+    {{-- MEMBER SEARCH RESULTS --}}
     @if ($members !== null)
         @if ($members->isEmpty())
             <p role="status">
@@ -115,6 +128,7 @@
         @else
             <table>
                 <caption>Member search results</caption>
+
                 <thead>
                     <tr>
                         <th scope="col">Member ID</th>
@@ -129,17 +143,20 @@
                     @foreach ($members as $member)
                         <tr>
                             <td>{{ $member->member_id }}</td>
+
                             <td>
                                 {{ $member->first_name }}
                                 {{ $member->last_name }}
                             </td>
+
                             <td>{{ $member->email }}</td>
                             <td>{{ $member->phone }}</td>
+
                             <td>
                                 @if ($selectedMember?->member_id === $member->member_id)
                                     Selected
                                 @else
-                                    <a href="{{ route('checkout.index', array_merge($searchState, ['selected_member_id' => $member->member_id]))}}">
+                                    <a href="{{ route('checkout.index', array_merge($searchState, ['selected_member_id' => $member->member_id])) }}">
                                         Select {{ $member->first_name }} {{ $member->last_name }}
                                     </a>
                                 @endif
@@ -150,16 +167,17 @@
             </table>
         @endif
 
-        @if ($members->previousPageURL() || $members->hasMorePages())
+        {{-- Member result pagination --}}
+        @if ($members->previousPageUrl() || $members->hasMorePages())
             <nav aria-label="Member results">
-                @if ($members->previousPageURL())
-                    <a href="{{ $members->previousPageURL() }}">Previous</a>
+                @if ($members->previousPageUrl())
+                    <a href="{{ $members->previousPageUrl() }}">Previous</a>
                 @endif
 
-                <span>Page {{ $members->currentPage() }} </span>
+                <span>Page {{ $members->currentPage() }}</span>
 
                 @if ($members->hasMorePages())
-                    <a href="{{ $members->nextPageURL() }}">Next</a>
+                    <a href="{{ $members->nextPageUrl() }}">Next</a>
                 @endif
             </nav>
         @endif
@@ -167,56 +185,72 @@
 
     <hr>
 
-    <h3> Find a Book Copy</h3>
+    {{-- BOOK SEARCH --}}
+    <h3>Find a Book Copy</h3>
 
     <form method="GET" action="{{ route('checkout.index') }}">
+
+        <input type="hidden" name="book_search_action" value="1">
+
         <div>
             <label for="book_field">Search by:</label>
 
             <select id="book_field" name="book_field">
-                <option value="title" @Selected($bookField === 'title')>Title</option>
-                <option value="author" @Selected($bookField === 'author')>Author</option>
-                <option value="isbn" @Selected($bookField === 'isbn')>ISBN</option>
-                <option value="genre" @Selected($bookField === 'genre')>Genre</option>
-                <option value="book_id" @Selected($bookField === 'book_id')>Book ID</option>
-                <option value="copy_id" @Selected($bookField === 'copy_id')>Copy ID</option>
-                <option value="call_number" @Selected($bookField === 'call_number')>Call Number</option>
+                <option value="title" @selected($bookField === 'title')>Title</option>
+                <option value="author" @selected($bookField === 'author')>Author</option>
+                <option value="isbn" @selected($bookField === 'isbn')>ISBN</option>
+                <option value="genre" @selected($bookField === 'genre')>Genre</option>
+                <option value="book_id" @selected($bookField === 'book_id')>Book ID</option>
+                <option value="copy_id" @selected($bookField === 'copy_id')>Copy ID</option>
+                <option value="call_number" @selected($bookField === 'call_number')>Call Number</option>
             </select>
         </div>
-        
+
         <div>
-            <label for="book_search">Search Text:</label>
+            <label for="book_search">Book Search:</label>
+
             <input
                 type="search"
                 id="book_search"
                 name="book_search"
                 value="{{ $bookSearch }}"
                 maxlength="150"
-                placeholder="Enter search here..."
+                placeholder="Book info"
+                required
             >
         </div>
-        
+
+        {{-- BOOK STATUS FILTER --}}
         <div>
             <label for="copy_status">Copy Status:</label>
+
             <select id="copy_status" name="copy_status">
                 <option value="" @selected($copyStatus === '')>Any Status</option>
+
                 <option value="available" @selected($copyStatus === 'available')>Available</option>
-                <option value="checked_out" @selected($copyStatus === 'checked out')>Checked Out</option>
+
+                {{-- The controller uses checked_out, translates it to the database's status --}}
+                <option value="checked_out" @selected($copyStatus === 'checked_out')>Checked Out</option>
             </select>
         </div>
 
+        {{-- Preserve the existing member search and selections --}}
         <input type="hidden" name="member_search" value="{{ $memberSearch }}">
-        <input type="hidden" name="selected_member_id" value="{{ $selectedMember?->member_id}}">
+        <input type="hidden" name="selected_member_id" value="{{ $selectedMember?->member_id }}">
         <input type="hidden" name="selected_copy_id" value="{{ $selectedCopy?->copy_id }}">
+
         <button type="submit">Search for Books</button>
     </form>
 
+    {{-- BOOK COPY SEARCH RESULTS --}}
     @if ($bookCopies !== null)
         @if ($bookCopies->isEmpty())
+
             <p role="status">
-                No book copies were found on this results page.
-                Try another search or availability filter.
+                No matching book copies were found.
+                Try another search term or change the status filter.
             </p>
+
         @else
             <table>
                 <caption>Book copy search results</caption>
@@ -234,6 +268,7 @@
                     </tr>
                 </thead>
 
+                {{-- Display the matching physical book copies --}}
                 <tbody>
                     @foreach ($bookCopies as $copy)
                         <tr>
@@ -244,7 +279,9 @@
                             <td>{{ $copy->book->ISBN }}</td>
                             <td>{{ $copy->call_number }}</td>
                             <td>{{ $copy->status }}</td>
+
                             <td>
+                                {{-- Unavailable copies cannot be selected --}}
                                 @if ($copy->status !== 'available')
                                     Unavailable
                                 @elseif ($selectedCopy?->copy_id === $copy->copy_id)
@@ -261,6 +298,7 @@
             </table>
         @endif
 
+        {{-- BOOK COPY RESULT PAGES --}}
         @if ($bookCopies->previousPageUrl() || $bookCopies->hasMorePages())
             <nav aria-label="Book copy result pages">
                 @if ($bookCopies->previousPageUrl())
@@ -278,8 +316,10 @@
 
     <hr>
 
+    {{-- REVIEW AND CHECK OUT --}}
     <h3>3. Review and Check Out</h3>
 
+    {{-- Display the member selected for checkout --}}
     @if ($selectedMember)
         <p>
             <strong>Selected Member:</strong>
@@ -291,6 +331,7 @@
         <p>Select a member from the search results.</p>
     @endif
 
+    {{-- Display the physical book copy selected for checkout --}}
     @if ($selectedCopy)
         <p>
             <strong>Selected Book:</strong>
@@ -307,6 +348,7 @@
         <p>Select an available book copy from the search results.</p>
     @endif
 
+    {{-- REVIEW AND CHECK OUT --}}
     @if ($selectedMember && $selectedCopy)
         @if ($selectedCopy->status === 'available')
             <p>
