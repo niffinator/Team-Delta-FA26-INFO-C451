@@ -41,7 +41,7 @@ git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
         
         php artisan migrate:fresh --seeder=DemoSeeder
 
-8.) Start Laravel for demonstration page --this may not be necessary as it is part of the seeder command
+8.) Start Laravel for demonstration page
 
     php artisan serve
 
