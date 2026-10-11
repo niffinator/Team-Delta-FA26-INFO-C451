@@ -27,7 +27,7 @@ class AuthController extends Controller
 
         $throttleKey = $this->throttleKey($request);
 
-        # Allowed 5 attempts before the rate limiter prevents further attempts
+        // Allowed 5 attempts before the rate limiter prevents further attempts
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
 
@@ -48,16 +48,16 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
         
-        # Return to the HomePage or page originally requested
+        // Return to the HomePage or page originally requested
         return redirect()->intended('/');
     }
 
-    # Log the user out of the application.
+    // Log the user out of the application
     public function logout(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
-        # Used to clear the session and regenerate the CSRF token
+        // Used to clear the session and regenerate the CSRF token
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -66,7 +66,7 @@ class AuthController extends Controller
             ->with('success', 'You have been logged out.');
     }
 
-    # Generate a unique key for rate limiting based on the user's IP address and username.
+    // Generate a unique key for rate limiting based on the user's IP address and username
     private function throttleKey(Request $request): string
     {
         $identity = Str::lower($request->input('username'))
