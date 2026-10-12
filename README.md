@@ -13,7 +13,9 @@
 
 1.) Clone our repository
 
-2.) Install PHP dependency:
+2.) Install PHP dependencies:
+
+Run
     
     composer install
 
@@ -21,42 +23,49 @@
 
     npm install
 
-4.) Create and configure the local environment file:
+4.) Create your local environment file:
 
-    We have provided a copy of the example.env; copy and past this in the same folder
+Copy the provided environment template (.env.example) and rename it to .env
 
-    Rename the new file to just .env 
-
-    Open your chosen method of accessing MySQL and create an empty database 
-
-    Update your .env file (can be done in your chosen IDE) to reflect your MySQL setup
+Save it in the project folder beside artisan. Confirm the filename is .env
 
 5.) Generate the Laravel application key
 
     php artisan key:generate
 
-6.) Configure the MySQL connection in '.env'
+6.) Build and seed the demonstration database:
 
-7.) Build and seed the demonstration database:
+May need to create a new MySQL database through your chosen MySQL tool (i.e. MySQL Workbench, MySQL Server, etc.) if you have not already
 
-    run the command:
+Configure the local server's host, port, username, and password
+
+Test the connection
+
+Create a schema (like LMS or something apt)
+
+Take that information and post it into your .env file and save the .env file
+
+Run the command in your chosen IDE:
         
-        php artisan migrate:fresh --seeder=DemoSeeder
+        php artisan config:clear
 
-8.) Start Laravel for demonstration page
+7.) Create the tables and seed the demonstration data from our DemoSeeder file:
 
-    php artisan serve
+Run the command in your chosen IDE:
+        php artisan migrate:fresh --seed --seeder=DemoSeeder
 
-8.5) Probably need to start Vite in another terminal
+8.) Start the application:
 
-    npm run dev
+Run the command in your chosen IDE:
+        php artisan serve
 
-9.) Open the application in a browser:
+Must keep this terminal open while you're using our application
 
-    http://127.0.0.1:8000
+9.) Open a browser and go to:
 
-10.) Enjoy the fruits of my labor and perform the tests/demonstrations as described in Assignment 5
+    127.0.0.1:8000
 
+Or the address that is printed in your terminal
 
 ### User Information Needed for Demonstration
 
