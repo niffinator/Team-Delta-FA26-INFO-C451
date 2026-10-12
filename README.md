@@ -21,9 +21,15 @@
 
     npm install
 
-4.) Create the local environment file:
+4.) Create and configure the local environment file:
 
-    We have provided a copy of the example.env, you will need to setup your own with your own password
+    We have provided a copy of the example.env; copy and past this in the same folder
+
+    Rename the new file to just .env 
+
+    Open your chosen method of accessing MySQL and create an empty database 
+
+    Update your .env file (can be done in your chosen IDE) to reflect your MySQL setup
 
 5.) Generate the Laravel application key
 
@@ -49,38 +55,18 @@
 
     http://127.0.0.1:8000
 
+10.) Enjoy the fruits of my labor and perform the tests/demonstrations as described in Assignment 5
 
-## UC-4 Checkout Demonstration 
 
-### To get a successful checkout
-Member ID: 2
-Copy ID: 3
+### User Information Needed for Demonstration
 
-*Press Submit
+Hard=coded users and passwords (thanks to the Database Seeder):
 
-Results:
-- Transaction is created 
-- Status of book copy 3 changed to 'checked out'
-- A message indicating a successful check out is shown
+username: big_bertha
+password: 12345
 
-### Failure: Copy Already Checked Out
-Member ID: 2
-Copy ID: 2
+username: simpsonian
+password: 246810
 
-*Press Submit
-
-Results:
-- Checkout is rejected
-- A message indicating the error is displayed
-- No transaction is created this time
-
-### Failure: Active Hold
-Member ID: 2
-Copy ID: 1
-
-*Press Submit
-
-Results:
-- Checkout is rejected because the book has an active hold
-- No transaction is created
-- *Note*: this is a current limitation of the system because it does not verify which member has the active hold, as noted in Assignment 3. This will be resolved in the future; however, still displays functionality of the system to reject based on hold status. 
+username: niraines
+password: 54321
