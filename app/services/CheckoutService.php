@@ -98,7 +98,7 @@ class CheckoutService
 
                 if($blockedByHolds) {
                     throw ValidationException::withMessages([
-                        'copy_id' => 'There are not enough available copies to check this book out.' +
+                        'copy_id' => 'There are not enough available copies to check this book out. ' .
                         'We must honor our active holds.'
                     ]);
                 }
