@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Hold;
+use App\Models\Member;
+use App\Models\Book;
+use Illuminate\Support\Carbon;
+
+class HoldController extends Controller
+{
+    // Show the hold placement page.
+    public function index()
+    {
+        $members = Member::orderBy('member_id')->get();
+        $books = Book::orderBy('title')->get();
+
+        $holds = Hold::with(['member', 'book'])
+            ->orderByDesc('hold_date')
+            ->orderByDesc('hold_id')
+            ->get();
+
+        return view('holds.index', compact(
+            'members',
+            'books',
+            'holds'
+        ));
+    }
+
+    // Save a new hold.
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'member_id' => ['required', 'integer', 'exists:members,member_id'],
+            'book_id' => ['required', 'integer', 'exists:books,book_id'],
+        ]);
+
+        // Do not create a duplicate active hold for this member and book.
+        $alreadyHeld = Hold::where('member_id', $validated['member_id'])
+            ->where('book_id', $validated['book_id'])
+            ->where('status', 'active')
+            ->exists();
+
+        if ($alreadyHeld) {
+            return back()
+                ->withErrors([
+                    'book_id' => 'This member already has an active hold for this book.'
+                ])
+                ->withInput();
+        }
+
+        // Create the hold in the database.
+        Hold::create([
+            'member_id' => $validated['member_id'],
+            'book_id' => $validated['book_id'],
+            'hold_date' => Carbon::today()->toDateString(),
+            'status' => 'active',
+        ]);
+
+        return redirect()
+            ->route('holds.index')
+            ->with('success', 'Book hold placed successfully.');
+    }
+
+    // Cancel an active hold.
+    public function cancel($hold_id)
+    {
+        $hold = Hold::where('hold_id', $hold_id)
+            ->where('status', 'active')
+            ->firstOrFail();
+
+        $hold->status = 'cancelled';
+        $hold->save();
+
+        return redirect()
+            ->route('holds.index')
+            ->with('success', 'Book hold cancelled successfully.');
+    }
+}
