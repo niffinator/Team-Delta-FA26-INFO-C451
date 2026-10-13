@@ -1,3 +1,4 @@
+```php
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -12,14 +13,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('holds', function (Blueprint $table) {
-
             $table->bigIncrements('hold_id');
 
             $table->unsignedBigInteger('member_id');
             $table->foreign('member_id')
                 ->references('member_id')
                 ->on('members');
-                
+
             $table->unsignedBigInteger('book_id');
             $table->foreign('book_id')
                 ->references('book_id')
@@ -31,7 +31,7 @@ return new class extends Migration
                 'active',
                 'fulfilled',
                 'cancelled'
-            ])->defualt('active');
+            ])->default('active');
         });
     }
 
@@ -40,6 +40,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hold');
+        Schema::dropIfExists('holds');
     }
 };
+```
