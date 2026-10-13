@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hold extends Model
 {
+    protected $table = 'holds';
+
     protected $primaryKey = 'hold_id';
 
     public $timestamps = false;
 
-    public function member()
-    {
-        return $this->belongsTo(Member::class, 'member_id');
-    }
-
-    public function book()
-    {
-        return $this->belongsTo(Book::class, 'book_id');
-    }
+    protected $fillable = [
+        'member_id',
+        'book_id',
+        'hold_date',
+        'status',
+    ];
 }
