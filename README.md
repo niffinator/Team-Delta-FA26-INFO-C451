@@ -1,21 +1,23 @@
-# Team-Delta-FA26-INFO-C451
+# Book WRMS A Web-based Records Management System for Libraries
+Team-Delta-FA26-INFO-C451
 -- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity 
 
-## Project Readme File
+## System Setup
 
 ### Requirements
--PHP
--Composer
--Node.js/ npm
--MySQL
+- PHP
+- Composer
+- Node.js/ npm
+- MySQL
 
 ### Setup
 
-1.) Clone our repository
+1.) Clone the Team-Delta-FA26-INFO-C451 repository
+```bash
+git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
+```
 
-2.) Install PHP dependencies:
-
-Run
+2.) Install PHP dependency:
     
     composer install
 
@@ -23,59 +25,69 @@ Run
 
     npm install
 
-4.) Create your local environment file:
-
-Copy the provided environment template (.env.example) and rename it to .env
-
-Save it in the project folder beside artisan. Confirm the filename is .env
+4.) Create the local environment file
+- We have provided a copy of the example.env
+- You will need to setup your own with your own password
 
 5.) Generate the Laravel application key
 
     php artisan key:generate
 
-6.) Build and seed the demonstration database:
+6.) Configure the MySQL connection in '.env'
 
-May need to create a new MySQL database through your chosen MySQL tool (i.e. MySQL Workbench, MySQL Server, etc.) if you have not already
+7.) Build and seed the demonstration database:
 
-Configure the local server's host, port, username, and password
-
-Test the connection
-
-Create a schema (like LMS or something apt)
-
-Take that information and post it into your .env file and save the .env file
-
-Run the command in your chosen IDE:
+    run the command:
         
-        php artisan config:clear
+        php artisan migrate:fresh --seeder=DemoSeeder
 
-7.) Create the tables and seed the demonstration data from our DemoSeeder file:
+8.) Start Laravel for demonstration page
 
-Run the command in your chosen IDE:
-        php artisan migrate:fresh --seed --seeder=DemoSeeder
+    php artisan serve
 
-8.) Start the application:
+8.5) Probably need to start Vite in another terminal
 
-Run the command in your chosen IDE:
-        php artisan serve
+    npm run dev
 
-Must keep this terminal open while you're using our application
+9.) Change git branch to:
+- origin/features/revisions-10-08-26
 
-9.) Open a browser and go to:
+10.) Open the application in a browser:
 
-    127.0.0.1:8000
+    http://127.0.0.1:8000
 
-Or the address that is printed in your terminal
 
-### User Information Needed for Demonstration
+## UC-4 Checkout Demonstration 
 
-Hard=coded users and passwords (thanks to the Database Seeder):
+### To get a successful checkout
+Member ID: 2
+Copy ID: 3
 
-username: big_bertha
-password: 12345
+*Press Submit
 
-username: simpsonian
-password: 246810
+Results:
+- Transaction is created 
+- Status of book copy 3 changed to 'checked out'
+- A message indicating a successful check out is shown
 
-username: niraines
-password: 54321
+### Failure: Copy Already Checked Out
+Member ID: 2
+Copy ID: 2
+
+*Press Submit
+
+Results:
+- Checkout is rejected
+- A message indicating the error is displayed
+- No transaction is created this time
+
+### Failure: Active Hold
+Member ID: 2
+Copy ID: 1
+
+*Press Submit
+
+Results:
+- Checkout is rejected because the book has an active hold
+- No transaction is created
+- *Note*: this is a current limitation of the system because it does not verify which member has the active hold, as noted in Assignment 3. This will be resolved in the future; however, still displays functionality of the system to reject based on hold status. 
