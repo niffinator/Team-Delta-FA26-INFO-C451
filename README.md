@@ -25,34 +25,29 @@ git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
 
     npm install
 
-4.) Create the local environment file
-- We have provided a copy of the example.env
-- You will need to setup your own with your own password
+4.) Configure the MySQL connection in '.env'
+We have provided an example copy: .env.example
+- Rename the file to .env
+- Uncomment the credentials 
+- Set your own password
 
 5.) Generate the Laravel application key
 
-    php artisan key:generate
+    php artisan key:generate 
 
-6.) Configure the MySQL connection in '.env'
-
-7.) Build and seed the demonstration database:
-
-    run the command:
+6.) Build and seed the demonstration database. Run the command:
         
         php artisan migrate:fresh --seeder=DemoSeeder
 
-8.) Start Laravel for demonstration page
+7.) Start Laravel for demonstration page
 
     php artisan serve
 
-8.5) Probably need to start Vite in another terminal
+8.) Probably need to start Vite in another terminal
 
     npm run dev
 
-9.) Change git branch to:
-- origin/features/revisions-10-08-26
-
-10.) Open the application in a browser:
+9.) Open the application in a browser:
 
     http://127.0.0.1:8000
 
