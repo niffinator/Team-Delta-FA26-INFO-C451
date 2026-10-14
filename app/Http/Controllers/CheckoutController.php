@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\CheckoutService;
+use App\Services\BookSearchService;
+use App\Services\MemberSearchService;
 use App\Models\BookCopy;
 use App\Models\Member;
 use App\Models\Transaction;
@@ -129,91 +131,37 @@ class CheckoutController extends Controller
             'selected_copy_id' => $selectedCopy?->copy_id,
         ];
 
-        // Search for members by their ID or name
         if ($searchIsValid && $memberSearch !== '') {
-            $memberQuery = Member::query();
+            $memberSearchService = app(MemberSearchService::class);
 
-            if (ctype_digit($memberSearch)) {
-                $memberQuery->where('member_id', $memberSearch);
-            } else {
-
-                // \s+ separates a full name that may have multiple whitespace characters
-                $nameParts = preg_split('/\s+/', $memberSearch);
-
-                foreach ($nameParts as $part) {
-                    $memberQuery->where(function ($query) use ($part) {
-                        $query->where('first_name', 'like', '%' . $part . '%')
-                            ->orWhere('last_name', 'like', '%' . $part . '%');
-                    });
-                }
-            }
-
-            $members = $memberQuery
-                ->orderBy('last_name')
-                ->orderBy('first_name')
-                ->orderBy('member_id')
+            $members = $memberSearchService
+                ->searchMembers(
+                    $memberSearch
+                )
                 ->simplePaginate(
                     10,
-
                     ['*'],
                     'member_page',
                     (int) ($filters['member_page'] ?? 1)
                 )
-                ->appends($searchState);
+                ->appends($searchState);    
         }
 
-        // The copy status remains an optional filter for that search
-        if (
-            $searchIsValid &&
-            $bookSearch !== ''
-        ) {
-            $copyQuery = BookCopy::with('book')->whereHas('book');
+        // Keep this; need to pass to query
+        $bookCopies = null;
 
-            if ($bookSearch !== '') {
-                if ($bookField === 'copy_id') {
-                    $copyQuery->where('copy_id', $bookSearch);
-                } elseif ($bookField === 'call_number') {
-                    $copyQuery->where(
-                        'call_number',
-                        'like',
-                        '%' . $bookSearch . '%'
-                    );
-                } else {
-                    $copyQuery->whereHas(
-                        'book',
-                        function ($query) use ($bookField, $bookSearch) {
-                            if ($bookField === 'book_id') {
-                                $query->where('book_id', $bookSearch);
-                            } else {
-                                $query->where(
-                                    $bookField,
-                                    'like',
-                                    '%' . $bookSearch . '%'
-                                );
-                            }
-                        }
-                    );
-                }
-            }
+        // Validate the search, query for book copies, and paginate the results 
+        if ($searchIsValid && $bookSearch !== '') {
+            $bookSearchService = app(BookSearchService::class);
 
-            // Apply the optional availability filter
-            if ($copyStatus !== '') {
-
-                // The form sends checked_out, but the service currently stores the value as 'checked out'. No issues found but keep in mind
-                $databaseStatus = $copyStatus === 'checked_out'
-                    ? 'checked out'
-                    : $copyStatus;
-
-                $copyQuery->where('status', $databaseStatus);
-            }
-
-            $bookCopies = $copyQuery
-                ->orderBy('book_id')
-                ->orderBy('copy_id')
+            $bookCopies = $bookSearchService
+                ->searchBooks(
+                    $bookSearch,
+                    $bookField,
+                    $copyStatus
+                )
                 ->simplePaginate(
                     10,
-
-                    // Corrected the column wildcard due to 
                     ['*'],
                     'copy_page',
                     (int) ($filters['copy_page'] ?? 1)

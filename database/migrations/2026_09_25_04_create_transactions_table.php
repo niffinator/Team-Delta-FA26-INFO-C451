@@ -51,7 +51,7 @@ return new class extends Migration
             );
         });
 
-        // Database constraints to conform to business rules
+        // Database constraints to conform to business rules - related to checkout and return dates, and late fees
         DB::statement("
             ALTER TABLE transactions
             ADD CONSTRAINT transactions_due_date_valid

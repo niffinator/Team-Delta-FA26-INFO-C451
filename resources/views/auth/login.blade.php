@@ -19,7 +19,6 @@
     @if ($errors->any())
         <div role="alert">
             <strong>We could not sign you in because:</strong>
-
             <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
