@@ -17,7 +17,12 @@
     <h3>Library Operations</h3>
 
     <p>
-        We currently support barebones implementation of our webpage views (with much of the content being placeholders) and a checkout feature on the checkout page.
+        This is a system built to operate within a small library operation. We currently support:
     </p>
+            <ul>Extensive catalog search via the Books page</ul>
+            <ul>A Members search page with no content</ul>
+            <ul>A functioning and error-handling Check Out page</ul>
+            <ul>A functioning and error-handling Holds page</ul>
+            <ul>A Reports page with no content</ul>
 
 @endsection
