@@ -1,81 +1,145 @@
-# Team-Delta-FA26-INFO-C451
+# Book WRMS A Web-based Records Management System for Libraries
+Team-Delta-FA26-INFO-C451
 -- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity 
 
-## Project Readme File
+## System Setup
 
 ### Requirements
--PHP
--Composer
--Node.js/ npm
--MySQL
+- PHP
+- Composer
+- Node.js/ npm
+- MySQL
 
 ### Setup
 
-1.) Clone our repository
+ 1.) Clone the Team-Delta-FA26-INFO-C451 repository in your terminal
 
-2.) Install PHP dependencies:
+    git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
+ 
+ 2.) Open the program folder in an IDE
 
-Run
+ 3.) Configure the MySQL connection in the .env.example file
+- Find the .env.example file
+- Rename it to .env
+- Uncomment the credentials 
+- Set your root password
+- Save
+
+ 4.) Open terminal
+
+ 5.) Install PHP dependency:
     
     composer install
 
-3.) Install frontend dependency:
+ 6.) Install frontend dependency:
 
     npm install
 
-4.) Create your local environment file:
+ 7.) Run the command
 
-Copy the provided environment template (.env.example) and rename it to .env
+    php artisan config:clear
 
-Save it in the project folder beside artisan. Confirm the filename is .env
+ 8.) Generate the Laravel application key
 
-5.) Generate the Laravel application key
+    php artisan key:generate 
 
-    php artisan key:generate
-
-6.) Build and seed the demonstration database:
-
-May need to create a new MySQL database through your chosen MySQL tool (i.e. MySQL Workbench, MySQL Server, etc.) if you have not already
-
-Configure the local server's host, port, username, and password
-
-Test the connection
-
-Create a schema (like LMS or something apt)
-
-Take that information and post it into your .env file and save the .env file
-
-Run the command in your chosen IDE:
+ 9.) Build and seed the demonstration database. Run the command:
         
-        php artisan config:clear
+    php artisan migrate:fresh --seeder=DemoSeeder
 
-7.) Create the tables and seed the demonstration data from our DemoSeeder file:
+10.) Start Laravel for demonstration page
 
-Run the command in your chosen IDE:
-        php artisan migrate:fresh --seed --seeder=DemoSeeder
+    php artisan serve
 
-8.) Start the application:
+11.) In another terminal, start Vite for our project's styles, JavaScript, and BootStrap imports; keeps page up-to-date as changes are made
 
-Run the command in your chosen IDE:
-        php artisan serve
+    npm run dev
 
-Must keep this terminal open while you're using our application
+12.) Open the application in a browser:
 
-9.) Open a browser and go to:
+    http://127.0.0.1:8000
 
-    127.0.0.1:8000
 
-Or the address that is printed in your terminal
+## Sign In as Sample User
 
-### User Information Needed for Demonstration
+### Circulation Clerk
+- Username: big_bertha
+- Password: 12345
 
-Hard=coded users and passwords (thanks to the Database Seeder):
+### Librarian
+- Username: niraines
+- Password: 54321
 
-username: big_bertha
-password: 12345
+## Sample Books
 
-username: simpsonian
-password: 246810
+- Book ID: 1
+- Copy ID: 1
+- Title: The Hobbit
+- Author: J.R.R. Tolkien
+- ISBN: 9780547928227
+- Call Number: F TOLKIEN
+- Availability: available
+-----
+- Book ID: 1
+- Copy ID: 2
+- Title: The Hobbit
+- Author: J.R.R. Tolkien
+- ISBN: 9780547928227
+- Call Number: F TOLKIEN
+- Availability: available
+-----
+- Book ID: 1
+- Copy ID: 3
+- Title: The Hobbit
+- Author: J.R.R. Tolkien
+- ISBN: 9780547928227
+- Call Number: F TOLKIEN
+- Availability: checked out
+-----
+- Book ID: 2
+- Copy ID: 4
+- Title: Wheel of Time: The Eye of the World
+- Author: Robert Jordan
+- ISBN: 9781250768681
+- Call Number: F JORDAN
+- Availability: checked out
+-----
+- Book ID: 3
+- Copy ID: 5
+- Title: Neuromancer
+- Author: William Gibson
+- ISBN: 9780441007462
+- Call Number: SF GIBSON
+- Availability: available  
 
-username: niraines
-password: 54321
+## UC-4 Checkout Demonstration 
+
+### To get a successful checkout
+- Member ID: 2
+- Copy ID: 3
+*Press Submit
+
+Results:
+- Transaction is created 
+- Status of book copy 3 changed to 'checked out'
+- A message indicating a successful check out is shown
+
+### Failure: Copy Already Checked Out
+- Member ID: 2
+- Copy ID: 2
+*Press Submit
+
+Results:
+- Checkout is rejected
+- A message indicating the error is displayed
+- No transaction is created this time
+
+### Failure: Active Hold
+- Member ID: 2
+- Copy ID: 1
+*Press Submit
+
+Results:
+- Checkout is rejected because the book has an active hold
+- No transaction is created
+- *Note*: this is a current limitation of the system because it does not verify which member has the active hold, as noted in Assignment 3. This will be resolved in the future; however, still displays functionality of the system to reject based on hold status. 
