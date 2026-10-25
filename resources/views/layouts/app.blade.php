@@ -10,7 +10,7 @@
 
 <body>
     
-    <div class="container" role="heading" text-align="center">
+    <div class="container" align="center">
 
         
         <header>
@@ -32,7 +32,8 @@
                         <a href="{{ route('members.index')}}">Members</a>
 
                         @can('process-circulation')
-                        | <a href="{{ route('checkout.index') }}">Check Out</a> |
+                        | <a href="{{ route('checkout.index') }}">Check Out</a> 
+                        | <a href="{{ route('holds.index') }}">Holds</a>
                         @endcan
 
                         @can('run-reports')

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\HoldController;
 use Illuminate\Support\Facades\Route;
 
 // Incredibly limited functionality for anyone not logged in - can only see login page
@@ -39,6 +40,16 @@ Route::middleware('auth:web')->group(function() {
 
             Route::post('/checkout', [CheckoutController::class, 'store'])
                 ->name('checkout.store');
+            
+            Route::get('/holds', [HoldController::class, 'index'])
+                ->name('holds.index');
+
+            Route::post('/holds', [HoldController::class, 'store'])
+                ->name('holds.store');
+
+            Route::patch('/holds/{hold_id}/cancel', [HoldController::class, 'cancel'])
+                ->whereNumber('hold_id')
+                ->name('holds.cancel');            
 
         });
 

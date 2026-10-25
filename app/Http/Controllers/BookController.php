@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BookCopy;
 use Illuminate\Http\Request;
+use App\Services\BookSearchService;
 use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
@@ -73,66 +74,19 @@ class BookController extends Controller
             'copy_status' => $copyStatus,
         ];
 
-        if (
-            $searchIsValid &&
-            $bookSearch !== ''
-        ) {
-            // Retrieve physical copies and their associated Book records
-            $copyQuery = BookCopy::with('book')->whereHas('book');
+        // Keep this; need to pass to query
+        $bookCopies = null;
 
-            if ($bookField === 'copy_id') {
+        // Validate the search, query for book copies, and paginate the results 
+        if ($searchIsValid && $bookSearch !== '') {
+            $bookSearchService = app(BookSearchService::class);
 
-                // Copy ID belongs to the BookCopy table
-                $copyQuery->where('copy_id', $bookSearch);
-
-            } elseif ($bookField === 'call_number') {
-
-                // Call number also belongs to the BookCopy table
-                $copyQuery->where(
-                    'call_number',
-                    'like',
-                    '%' . $bookSearch . '%'
-                );
-
-            } else {
-
-                $copyQuery->whereHas(
-                    'book',
-                    function ($query) use ($bookField, $bookSearch) {
-
-                        // Book ID is searched as an exact value
-                        if ($bookField === 'book_id') {
-                            $query->where('book_id', $bookSearch);
-
-                        } else {
-
-                            // LIKE allows partial matches for text searches
-                            // Example: "Harry" can match "Harry Potter"
-                            $query->where(
-                                $bookField,
-                                'like',
-                                '%' . $bookSearch . '%'
-                            );
-                        }
-                    }
-                );
-            }
-
-            // Apply the optional availability filter
-            if ($copyStatus !== '') {
-
-                // The form uses checked_out, but CheckoutService currently stores the status as 'checked out'
-                $databaseStatus = $copyStatus === 'checked_out'
-                    ? 'checked out'
-                    : $copyStatus;
-
-                $copyQuery->where('status', $databaseStatus);
-            }
-
-            // Display 10 copies per page
-            $bookCopies = $copyQuery
-                ->orderBy('book_id')
-                ->orderBy('copy_id')
+            $bookCopies = $bookSearchService
+                ->searchBooks(
+                    $bookSearch,
+                    $bookField,
+                    $copyStatus
+                )
                 ->simplePaginate(
                     10,
                     ['*'],
