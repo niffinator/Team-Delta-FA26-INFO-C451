@@ -1,20 +1,30 @@
-
 <?php
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    /**
-     * Display the members page and handle member search.
-     */
     public function index(Request $request)
     {
-        // Member search will be implemented after we confirm
-        // the existing Member model and database column names.
+        $search = trim((string) $request->query('search', ''));
 
-        return view('members.index');
+        $members = Member::query()
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhere('phone', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('members.index', compact('members', 'search'));
     }
 }
