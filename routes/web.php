@@ -5,6 +5,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\HoldController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MemberController;
 
 // Incredibly limited functionality for anyone not logged in - can only see login page
 Route::middleware('guest:web')
@@ -29,8 +30,8 @@ Route::middleware('auth:web')->group(function() {
         Route::get('/books', [BookController::class, 'index'])
             ->name('books.index');
 
-        Route::view('/members', 'members.index')
-            ->name('members.index');
+        Route::get('/members', [MemberController::class, 'index'])
+    ->name('members.index');
 
         // Checkout form and submission security
         Route::middleware('can:process-circulation')->group(function () {
