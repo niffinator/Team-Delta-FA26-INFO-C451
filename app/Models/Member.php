@@ -10,6 +10,13 @@ class Member extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+    ];
+
     public function transactions()
     {
         return $this->hasMany(Transaction::class, 'member_id');
