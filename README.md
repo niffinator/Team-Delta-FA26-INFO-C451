@@ -112,7 +112,7 @@ Team-Delta-FA26-INFO-C451
 - Call Number: SF GIBSON
 - Availability: available
 
-## Sample Users
+## Sample Members
 
 - Member ID: 1
 - Member Name: John Books
