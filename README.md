@@ -110,5 +110,21 @@ Team-Delta-FA26-INFO-C451
 - Author: William Gibson
 - ISBN: 9780441007462
 - Call Number: SF GIBSON
-- Availability: available  
+- Availability: available
 
+## Sample Users
+
+- Member ID: 1
+- Member Name: John Books
+- Email: john.books@fake.com
+- Phone: 765-555-5555
+-----
+- Member ID: 2
+- Member Name: Mel Brooks
+- Email: mel@bigshothollywood.com
+- Phone: 317-555-5555
+-----
+- Member ID: 3
+- Member Name: Pink Floyd
+- Email: band@UK.gov
+- Phone: 54-3223-455
