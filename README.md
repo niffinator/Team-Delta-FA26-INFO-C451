@@ -112,7 +112,3 @@ Team-Delta-FA26-INFO-C451
 - Call Number: SF GIBSON
 - Availability: available  
 
-Results:
-- Checkout is rejected because the book has an active hold
-- No transaction is created
-- *Note*: this is a current limitation of the system because it does not verify which member has the active hold, as noted in Assignment 3. This will be resolved in the future; however, still displays functionality of the system to reject based on hold status. 
