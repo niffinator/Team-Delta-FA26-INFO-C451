@@ -35,6 +35,14 @@ return new class extends Migration
             $table->timestamp('checkout_date');
             $table->timestamp('due_date');
             $table->timestamp('return_date')->nullable();
+
+            // Track the employee responsible for processing the return
+            $table->unsignedBigInteger('returned_by_user_id')->nullable();
+            $table->foreign('returned_by_user_id')
+                ->references('user_id')
+                ->on('users')
+                ->restrictOnDelete();
+
             $table->decimal('late_fee', 8, 2)->default(0);
 
             // Virtual column for tracking open transactions per copy

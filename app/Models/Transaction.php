@@ -17,6 +17,7 @@ class Transaction extends Model
         'checkout_date',
         'due_date',
         'return_date',
+        'returned_by_user_id',
         'late_fee',
     ];
 
@@ -33,6 +34,12 @@ class Transaction extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Identify the employee who processed the book return
+    public function returnedBy()
+    {
+        return $this->belongsTo(User::class, 'returned_by_user_id');
     }
 
     public function member()

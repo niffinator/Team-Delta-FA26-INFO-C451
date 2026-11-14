@@ -3,11 +3,27 @@
 @section('title', 'Members')
 
 @section('content')
-    <h2>Member Information</h2>
+
+    <h2> Member Information </h2>
+
+    {{-- Display member creation confirmation --}}
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- Allow librarians to add new members --}}
+    @can('manage-members')
+        <div class="mb-3">
+            <a href="{{ route('members.create') }}" class="btn btn-primary">
+                Add a Member
+            </a>
+        </div>
+    @endcan
 
     <form action="{{ route('members.index') }}" method="GET">
-        <label for="search">Search members</label>
-
+    <label for="search">Search members</label>
         <input
             type="text"
             id="search"
@@ -62,4 +78,5 @@
     <div>
         {{ $members->links() }}
     </div>
+
 @endsection

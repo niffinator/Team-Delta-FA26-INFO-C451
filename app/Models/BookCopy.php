@@ -10,6 +10,13 @@ class BookCopy extends Model
 
     public $timestamps = false;
 
+    // Allow assignment of validated physical book copy information
+    protected $fillable = [
+        'book_id',
+        'call_number',
+        'status',
+    ];
+
     public function book()
     {
         return $this->belongsTo(Book::class, 'book_id');

@@ -10,7 +10,7 @@ class Member extends Model
 
     public $timestamps = false;
 
-    protected $fillable = [
+        protected $fillable = [
         'first_name',
         'last_name',
         'email',

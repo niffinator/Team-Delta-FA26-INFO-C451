@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -15,7 +16,7 @@ return new class extends Migration
             $table->engine('InnoDB');
             
             $table->bigIncrements('book_id');
-            $table->string('ISBN', length: 13);
+            $table->string('ISBN', length: 13)->unique();
             $table->string('title');
             $table->string('author');
             $table->string('genre');
