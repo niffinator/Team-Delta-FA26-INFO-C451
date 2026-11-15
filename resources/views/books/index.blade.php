@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Books')
@@ -6,6 +5,22 @@
 @section('content')
 
     <h2> Book Information </h2>
+
+    {{-- Display book creation confirmation --}}
+    @if (session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- Allow librarians to add new books --}}
+    @can('manage-books')
+        <div class="mb-3">
+            <a href="{{ route('books.create') }}" class="btn btn-primary">
+                Add a Book
+            </a>
+        </div>
+    @endcan
 
     <p>Here you can browse our book collection to assist an inquisitive member.</p>
 

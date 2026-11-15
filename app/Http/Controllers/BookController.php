@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\BookCopy;
 use Illuminate\Http\Request;
 use App\Services\BookSearchService;
+use App\Services\BookService;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
@@ -77,7 +80,7 @@ class BookController extends Controller
         // Keep this; need to pass to query
         $bookCopies = null;
 
-        // Validate the search, query for book copies, and paginate the results 
+        // Validate the search, query for book copies, and paginate the results
         if ($searchIsValid && $bookSearch !== '') {
             $bookSearchService = app(BookSearchService::class);
 
@@ -105,5 +108,44 @@ class BookController extends Controller
             'searchErrors' => $searchErrors,
             'searchState' => $searchState
         ]);
+    }
+
+    public function create()
+    {
+        // Restrict book creation to librarians
+        Gate::authorize('manage-books');
+
+        return view('books.create');
+    }
+
+    public function store(Request $request, BookService $bookService)
+    {
+        // Verify that the user is authorized to create books
+        Gate::authorize('manage-books');
+
+        // Validate book information before creating the record
+        $validated = $request->validate([
+            'ISBN' => [
+                'required',
+                'string',
+                'max:13',
+                'regex:/^(?:[0-9]{9}[0-9Xx]|[0-9]{13})$/',
+                Rule::unique('books', 'ISBN'),
+            ],
+            'title' => ['required', 'string', 'max:255'],
+            'author' => ['required', 'string', 'max:255'],
+            'genre' => ['required', 'string', 'max:255'],
+            'call_number' => ['required', 'string', 'max:255'],
+        ], [
+            // Provide a clear message when an ISBN already exists
+            'ISBN.unique' => 'A book with this ISBN already exists. Add a physical copy to the existing book instead.',
+        ]);
+
+        // Pass validated information to the book service
+        $bookService->createBook($validated);
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', 'Book added successfully.');
     }
 }

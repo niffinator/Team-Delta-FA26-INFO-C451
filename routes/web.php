@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\HoldController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
 // Incredibly limited functionality for anyone not logged in - can only see login page
@@ -29,8 +31,26 @@ Route::middleware('auth:web')->group(function() {
         Route::get('/books', [BookController::class, 'index'])
             ->name('books.index');
 
-        Route::view('/members', 'members.index')
+        // Book management restricted to authorized users
+        Route::middleware('can:manage-books')->group(function () {
+            Route::get('/books/create', [BookController::class, 'create'])
+                ->name('books.create');
+
+            Route::post('/books', [BookController::class, 'store'])
+                ->name('books.store');
+        });
+
+        Route::get('/members', [MemberController::class, 'index'])
             ->name('members.index');
+
+        // Member management restricted to authorized users
+        Route::middleware('can:manage-members')->group(function () {
+            Route::get('/members/create', [MemberController::class, 'create'])
+                ->name('members.create');
+
+            Route::post('/members', [MemberController::class, 'store'])
+                ->name('members.store');
+        });
 
         // Checkout form and submission security
         Route::middleware('can:process-circulation')->group(function () {
@@ -40,6 +60,13 @@ Route::middleware('auth:web')->group(function() {
 
             Route::post('/checkout', [CheckoutController::class, 'store'])
                 ->name('checkout.store');
+
+            // Return book form and submission security
+            Route::get('/returns', [ReturnController::class, 'index'])
+                ->name('returns.index');
+
+            Route::post('/returns', [ReturnController::class, 'store'])
+                ->name('returns.store');
             
             Route::get('/holds', [HoldController::class, 'index'])
                 ->name('holds.index');

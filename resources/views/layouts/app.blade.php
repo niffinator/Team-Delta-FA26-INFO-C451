@@ -32,7 +32,8 @@
                         <a href="{{ route('members.index')}}">Members</a>
 
                         @can('process-circulation')
-                        | <a href="{{ route('checkout.index') }}">Check Out</a> 
+                        | <a href="{{ route('checkout.index') }}">Check Out</a>
+                        | <a href="{{ route('returns.index') }}">Return Books</a>
                         | <a href="{{ route('holds.index') }}">Holds</a>
                         @endcan
 
