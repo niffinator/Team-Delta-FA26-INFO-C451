@@ -1,65 +1,89 @@
-# Book WRMS A Web-based Records Management System for Libraries
-Team-Delta-FA26-INFO-C451
--- Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity 
+# Book WRMS: A Web-Based Records Management System for Libraries
+
+Team Delta â€” FA26 INFO-C451
+Nicholas Raines, Jennifer Rose, Bryit Sumner, Trinity Young
 
 ## System Setup
 
 ### Requirements
-- PHP
-- Composer
-- Node.js/ npm
-- MySQL
+
+- **PHP 8.4.1 or later** for this submitted version. The current `composer.lock` contains dependencies that require PHP >= 8.4.1.
+- **Composer** for PHP dependencies.
+- **Node.js 20.19+ or 22.12+**, with npm, for the current Vite version.
+- **MySQL with InnoDB support** (MySQL 8.4 is the team's documented version). The application uses foreign keys and database transactions.
+- WAMP or another working local PHP/MySQL environment.
+
+On Windows, confirm the PHP **command-line** version with `php -v`. The version selected in the WAMP tray does not necessarily change PowerShell's PHP version. If PHP 8.4.15 is installed in WAMP, you can select it for the current PowerShell window with:
+
+```powershell
+$env:Path = "C:\wamp64\bin\php\php8.4.15;$env:Path"
+php -v
+```
 
 ### Setup
 
- 1.) Clone the Team-Delta-FA26-INFO-C451 repository in your terminal
+1. Clone the repository and open the project folder in a terminal:
 
-    git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
- 
- 2.) Open the program folder in an IDE
+   ```powershell
+   git clone https://github.com/niffinator/Team-Delta-FA26-INFO-C451.git
+   cd Team-Delta-FA26-INFO-C451
+   ```
 
- 3.) Configure the MySQL connection in the .env.example file
-- Find the .env.example file
-- Rename it to .env
-- Uncomment the credentials 
-- Set your root password
-- Save
+2. Start MySQL and create a **new, empty database** in phpMyAdmin (for example, `delta_lms_demo`). Do not reuse a database containing important data.
 
- 4.) Open terminal
+3. Copy `.env.example` to `.env` and configure the database connection for the database you created:
 
- 5.) Install PHP dependency:
-    
-    composer install
+   ```powershell
+   Copy-Item .env.example .env
+   ```
 
- 6.) Install frontend dependency:
+   Example `.env` settings (use your real MySQL credentials):
 
-    npm install
+   ```ini
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=delta_lms_demo
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
- 7.) Run the command
+   Keep `.env` out of Git; it may contain database passwords.
 
-    php artisan config:clear
+4. Install dependencies and generate the application key:
 
- 8.) Generate the Laravel application key
+   ```powershell
+   composer install
+   npm install
+   php artisan key:generate
+   php artisan config:clear
+   ```
 
-    php artisan key:generate 
+5. Verify that `.env` points to your new database. The project's MySQL configuration specifies the **InnoDB** storage engine so table creation does not depend on a local MyISAM default.
 
- 9.) Build and seed the demonstration database. Run the command:
-        
-    php artisan migrate:fresh --seeder=DemoSeeder
+6. Create the tables and demonstration data:
 
-10.) Start Laravel for demonstration page
+   ```powershell
+   php artisan migrate:fresh --seeder=DemoSeeder
+   ```
 
-    php artisan serve
+   **Warning:** `migrate:fresh` deletes all tables in the configured database. Only use it on a disposable demo/test database.
 
-11.) In another terminal, start Vite for our project's styles, JavaScript, and BootStrap imports; keeps page up-to-date as changes are made
+7. Start Laravel:
 
-    npm run dev
+   ```powershell
+   php artisan serve
+   ```
 
-12.) Open the application in a browser:
+8. In a second terminal in the project folder, start Vite:
 
-    http://127.0.0.1:8000
+   ```powershell
+   npm run dev
+   ```
 
+   Or run `npm run build` to generate static frontend assets without leaving the Vite development server running.
 
+9. Open `http://127.0.0.1:8000` in a browser and sign in with a sample account below.
 ## Sign In as Sample User
 
 ### Circulation Clerk
@@ -110,4 +134,21 @@ Team-Delta-FA26-INFO-C451
 - Author: William Gibson
 - ISBN: 9780441007462
 - Call Number: SF GIBSON
-- Availability: available 
+- Availability: available
+
+## Sample Members
+
+- Member ID: 1
+- Member Name: John Books
+- Email: john.books@fake.com
+- Phone: 765-555-5555
+-----
+- Member ID: 2
+- Member Name: Mel Brooks
+- Email: mel@bigshothollywood.com
+- Phone: 317-555-5555
+-----
+- Member ID: 3
+- Member Name: Pink Floyd
+- Email: band@UK.gov
+- Phone: 54-3223-455
