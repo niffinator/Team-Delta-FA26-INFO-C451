@@ -94,7 +94,7 @@ Team-Delta-FA26-INFO-C451
 - Author: J.R.R. Tolkien
 - ISBN: 9780547928227
 - Call Number: F TOLKIEN
-- Availability: checked out
+- Availability: available
 -----
 - Book ID: 2
 - Copy ID: 4
