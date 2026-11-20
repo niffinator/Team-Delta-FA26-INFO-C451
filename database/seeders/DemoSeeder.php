@@ -113,7 +113,7 @@ class DemoSeeder extends Seeder
             DB::table('book_copies')->insert([
                 'book_id' => $hobbitId,
                 'call_number' => 'F TOLKIEN',
-                'status' => 'checked out',
+                'status' => 'available',
             ]);            
 
             // Checked out copy of Wheel of Time

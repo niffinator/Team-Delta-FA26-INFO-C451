@@ -138,7 +138,7 @@ class BookController extends Controller
             'call_number' => ['required', 'string', 'max:255'],
         ], [
             // Provide a clear message when an ISBN already exists
-            'ISBN.unique' => 'A book with this ISBN already exists. Add a physical copy to the existing book instead.',
+            'ISBN.unique' => 'A book with this ISBN already exists.',
         ]);
 
         // Pass validated information to the book service

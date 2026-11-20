@@ -55,7 +55,7 @@ class BookService
             ) {
                 // Display the existing ISBN validation message
                 throw ValidationException::withMessages([
-                    'ISBN' => 'A book with this ISBN already exists. Add a physical copy to the existing book instead.',
+                    'ISBN' => 'A book with this ISBN already exists.',
                 ]);
             }
 
