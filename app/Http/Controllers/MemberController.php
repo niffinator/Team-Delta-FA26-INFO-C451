@@ -4,30 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Member;
 use App\Services\MemberService;
+use App\Services\MemberSearchService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class MemberController extends Controller
 {
-    public function index(Request $request)
-    {
+    // Display members and handle member searches
+    public function index(
+        Request $request,
+        MemberSearchService $memberSearchService
+    ) {
+        // Get the search term from the request
         $search = trim((string) $request->query('search', ''));
 
-        $members = Member::query()
-            ->when($search !== '', function ($query) use ($search) {
-                $query->where(function ($query) use ($search) {
-                    $query->where('first_name', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%")
-                        ->orWhere('phone', 'like', "%{$search}%");
-                });
-            })
-            ->orderBy('last_name')
-            ->orderBy('first_name')
+        // Use the member search service
+        $members = $memberSearchService
+            ->searchMembers($search)
             ->paginate(10)
             ->withQueryString();
 
+        // Return member records to the Members page
         return view('members.index', compact('members', 'search'));
     }
 

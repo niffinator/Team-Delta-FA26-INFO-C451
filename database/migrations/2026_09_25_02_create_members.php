@@ -17,7 +17,7 @@ return new class extends Migration
             $table->bigIncrements('member_id');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->char('phone');
         });
     }
